@@ -1,0 +1,6 @@
+AppBundle\Entity\Competences:
+    attributes:
+        idComp:
+            groups: ['GET_LIST']
+        nom:
+            groups: ['GET_LIST']
