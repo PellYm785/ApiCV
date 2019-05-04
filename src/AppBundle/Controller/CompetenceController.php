@@ -72,17 +72,17 @@ class CompetenceController extends FOSRestController
             ->getRepository('AppBundle:Competence')
             ->search(
                 $key,
-                $order,
-                $page
+                $page,
+                $order
             );
 
        $datas = array();
+
 
        foreach ($pager->getCurrentPageResults() as $result){
            $context = SerializationContext::create()->setGroups('GET_LIST');
            $datas[] = $this->get('jms_serializer')->toArray($result, $context);
        }
-
 
         return new Competences(
             $datas,
@@ -109,7 +109,7 @@ class CompetenceController extends FOSRestController
      *     }
      * )
      */
-    public function createAction(Request $request,Competence $competence, ConstraintViolationList $violations)
+    public function createAction(Competence $competence, ConstraintViolationList $violations)
     {
         if (count($violations)) {
             $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
@@ -125,11 +125,6 @@ class CompetenceController extends FOSRestController
 
         $type = $em->getRepository('AppBundle:Typecomp')->find($competence->getType());
         $competence->setType($type);
-
-        if($competence->getNiveau()){
-            $niveau = $em->getRepository('AppBundle:Niveaucomp')->find($competence->getNiveau());
-            $competence->setNiveau($niveau);
-        }
 
         if($competence->getLangage()){
             $langage = $em->getRepository('AppBundle:Competence')->find($competence->getLangage());

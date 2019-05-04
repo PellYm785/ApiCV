@@ -66,7 +66,7 @@ class ExperienceController extends FOSRestController
      *     statusCode = 201
      * )
      * @ParamConverter(
-     *ompetences/62     "experience",
+     *     "experience",
      *     converter="fos_rest.request_body",
      *     options={
      *         "validator"={ "groups"="Create" }

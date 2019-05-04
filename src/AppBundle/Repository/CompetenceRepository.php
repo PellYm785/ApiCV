@@ -11,7 +11,7 @@ namespace AppBundle\Repository;
 
 class CompetenceRepository extends AbstractRepository
 {
-    public function search($term, $order = 'asc', $currentPage)
+    public function search($term, $currentPage, $order = 'asc')
     {
         $qb = $this
             ->createQueryBuilder('c')
