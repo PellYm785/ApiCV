@@ -3,16 +3,40 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Experience
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "experience_show",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *     )
+ * )
+ *
+ * @Hateoas\Relation(
+ *      "modify",
+ *      href = @Hateoas\Route(
+ *          "experience_update",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *     )
+ * )
+ *
+ * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *          "experience_delete",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *     )
+ * )
  *
  * @ORM\Table(name="experience")
  * @ORM\Entity
  */
-class Experience
+class  Experience
 {
     /**
      * @var integer

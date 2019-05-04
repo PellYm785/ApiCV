@@ -18,7 +18,10 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
             new FOS\RestBundle\FOSRestBundle(),
-            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
+            new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
+            new Nelmio\CorsBundle\NelmioCorsBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

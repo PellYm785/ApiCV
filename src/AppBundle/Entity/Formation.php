@@ -3,12 +3,35 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Formation
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "formation_show",
+ *          parameters = { "id" = "expr(object.getIdForm())" }
+ *     )
+ * )
  *
+ * @Hateoas\Relation(
+ *      "modify",
+ *      href = @Hateoas\Route(
+ *          "formation_update",
+ *          parameters = { "id" = "expr(object.getIdForm())" }
+ *     )
+ * )
+ *
+ * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *          "formation_delete",
+ *          parameters = { "id" = "expr(object.getIdForm())" }
+ *     )
+ * )
  * @ORM\Table(name="formation")
  * @ORM\Entity
  */

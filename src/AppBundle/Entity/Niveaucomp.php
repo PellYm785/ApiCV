@@ -4,10 +4,33 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Niveaucomp
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "niveaucomp_show",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *     )
+ * )
  *
+ * @Hateoas\Relation(
+ *      "modify",
+ *      href = @Hateoas\Route(
+ *          "niveaucomp_update",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *     )
+ * )
+ *
+ * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *          "niveaucomp_delete",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *     )
+ * )
  * @ORM\Table(name="niveaucomp")
  * @ORM\Entity
  */

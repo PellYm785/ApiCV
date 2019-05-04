@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Knp\Component\Pager\Paginator;
+use Pagerfanta\Pagerfanta;
 
 
 abstract class AbstractRepository extends EntityRepository
@@ -22,13 +23,10 @@ abstract class AbstractRepository extends EntityRepository
             throw new \LogicException('La page doit être plus grande que 0');
         }
 
-        $paginator  = new Paginator();
-        $pagination = $paginator->paginate(
-            $qb,
-            $currentPage,
-            10
-        );
+        $pager  = new Pagerfanta(new DoctrineORMAdapter($qb));
+        $pager->setCurrentPage($currentPage);
+        $pager->setMaxPerPage(10);
 
-        return $pagination;
+        return $pager;
     }
 }

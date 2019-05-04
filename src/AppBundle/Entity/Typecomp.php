@@ -4,10 +4,34 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Typecomp
  *
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "typecomp_show",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *     )
+ * )
+ *
+ * @Hateoas\Relation(
+ *      "modify",
+ *      href = @Hateoas\Route(
+ *          "typecomp_update",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *     )
+ * )
+ *
+ * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *          "typecomp_delete",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *     )
+ * )
  * @ORM\Table(name="typecomp")
  * @ORM\Entity
  */

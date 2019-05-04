@@ -3,11 +3,36 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Competence
+ *
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "competence_show",
+ *          parameters = { "id" = "expr(object.getIdComp())" }
+ *     )
+ * )
+ *
+ * @Hateoas\Relation(
+ *      "modify",
+ *      href = @Hateoas\Route(
+ *          "competence_update",
+ *          parameters = { "id" = "expr(object.getIdComp())" }
+ *     )
+ * )
+ *
+ * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *          "competence_delete",
+ *          parameters = { "id" = "expr(object.getIdComp())" }
+ *     )
+ * )
  *
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CompetenceRepository")
  *
@@ -32,7 +57,7 @@ class Competence
      * @Groups({"GET_LIST"})
      * @ORM\Column(name="nom", type="string", length=20, nullable=false)
      *
-     * @Assert\NotBlank(groups={"Create"})
+     * @Assert\NotBlank(groups={"Create", "Modify_patch"})
      */
     private $nom;
 
@@ -49,12 +74,13 @@ class Competence
     private $langage;
 
     /**
-     * @var \AppBundle\Entity\Niveaucomp
+     * @var float
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Niveaucomp")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="niveau", referencedColumnName="id")
-     * })
+     * @Groups({"GET_LIST"})
+     * @ORM\Column(name="niveau", type="float", nullable=false)
+     * @Assert\GreaterThanOrEqual(value="0")
+     * @Assert\LessThanOrEqual(value="1")
+     * @Assert\NotBlank(groups={"Create", "Modify_patch"})
      */
     private $niveau;
 
@@ -119,7 +145,7 @@ class Competence
     }
 
     /**
-     * @return Niveaucomp
+     * @return float
      */
     public function getNiveau()
     {
@@ -127,7 +153,7 @@ class Competence
     }
 
     /**
-     * @param Niveaucomp $niveau
+     * @param float $niveau
      */
     public function setNiveau($niveau)
     {
@@ -149,7 +175,6 @@ class Competence
     {
         $this->type = $type;
     }
-
 
 
 }

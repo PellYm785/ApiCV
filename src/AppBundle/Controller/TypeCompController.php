@@ -3,7 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Typecomp;
-use FOS\RestBundle\Controller\Annotations\Put;
+use AppBundle\Exception\ResourceValidationException;
+
 use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -72,18 +74,12 @@ class TypeCompController extends FOSRestController
     public function createAction(Typecomp $typecomp, ConstraintViolationList $violations)
     {
         if (count($violations)) {
-            $viols = array();
+            $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
 
-            $serializer = $this->get('serializer');
-
-            foreach ($violations as $violation){
-                $obj = array();
-                $obj["propriety"] = $violation->getPropertyPath();
-                $obj["message"] = $violation->getMessage();
-                $viols[] = $obj;
+            foreach ($violations as $violation) {
+                $message .= sprintf("Field %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
             }
-
-            return $this->view($viols, Response::HTTP_BAD_REQUEST);
+            throw new ResourceValidationException($message);
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -122,7 +118,10 @@ class TypeCompController extends FOSRestController
         $em->remove($typecomp);
         $em->flush();
 
-        return new Response('',Response::HTTP_ACCEPTED);
+        return $this->view(
+            $typecomp,
+            Response::HTTP_ACCEPTED
+        );
     }
 
     /**
@@ -134,15 +133,22 @@ class TypeCompController extends FOSRestController
      * @View(
      *     statusCode = 204
      * )
+     *
+     * @ParamConverter(
+     *     "typecompNew",
+     *     converter="fos_rest.request_body"
+     * )
      */
-    public function updateAction(Typecomp $typecomp)
+    public function updateAction(Typecomp $typecomp, Typecomp $typecompNew)
     {
-        $em = $this->getDoctrine()->getManager();
+        $typecomp->setType($typecompNew->getType());
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
 
-        $em->persist($typecomp);
-        $em->flush();
-
-        return new Response('',Response::HTTP_ACCEPTED);
+        return $this->view(
+            $typecomp,
+            Response::HTTP_ACCEPTED
+        );
     }
 
 
